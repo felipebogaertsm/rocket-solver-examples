@@ -9,29 +9,29 @@ import time
 
 import numpy as np
 
-from models.propulsion.grain import Grain
-from models.propulsion.grain.bates import BatesSegment
-from models.propulsion.structure import MotorStructure
-from models.propulsion.structure.nozzle import Nozzle
-from models.propulsion.structure.chamber import BoltedCombustionChamber
-from models.propellants.solid import get_solid_propellant_from_name
-from models.recovery import Recovery
-from models.rocket import Rocket
-from models.materials.metals import Steel, Al6061T6
-from models.materials.elastics import EPDM
-from models.propulsion.thermals import ThermalLiner
-from models.recovery.events import (
+from rocketsolver.models.propulsion.grain import Grain
+from rocketsolver.models.propulsion.grain.bates import BatesSegment
+from rocketsolver.models.propulsion.structure import MotorStructure
+from rocketsolver.models.propulsion.structure.nozzle import Nozzle
+from rocketsolver.models.propulsion.structure.chamber import BoltedCombustionChamber
+from rocketsolver.models.propellants.solid import get_solid_propellant_from_name
+from rocketsolver.models.recovery import Recovery
+from rocketsolver.models.rocket import Rocket
+from rocketsolver.models.materials.metals import Steel, Al6061T6
+from rocketsolver.models.materials.elastics import EPDM
+from rocketsolver.models.propulsion.thermals import ThermalLiner
+from rocketsolver.models.recovery.events import (
     AltitudeBasedEvent,
     ApogeeBasedEvent,
 )
-from models.recovery.parachutes import HemisphericalParachute
-from models.rocket.fuselage import Fuselage
-from models.rocket.structure import RocketStructure
-from models.atmosphere import Atmosphere1976
-from models.propulsion import SolidMotor
+from rocketsolver.models.recovery.parachutes import HemisphericalParachute
+from rocketsolver.models.rocket.fuselage import Fuselage
+from rocketsolver.models.rocket.structure import RocketStructure
+from rocketsolver.models.atmosphere import Atmosphere1976
+from rocketsolver.models.propulsion import SolidMotor
 
-from utils.utilities import output_eng_csv
-from utils.plots import (
+from rocketsolver.utils.utilities import output_eng_csv
+from rocketsolver.utils.plots import (
     performance_interactive_plot,
     performance_plot,
     main_plot,
@@ -39,8 +39,10 @@ from utils.plots import (
     ballistics_plots,
 )
 
-from simulations.internal_balistics_coupled import InternalBallisticsCoupled
-from simulations.structural import StructuralSimulation
+from rocketsolver.simulations.internal_balistics_coupled import (
+    InternalBallisticsCoupled,
+)
+from rocketsolver.simulations.structural import StructuralSimulation
 
 
 def main():

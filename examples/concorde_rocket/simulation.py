@@ -167,55 +167,9 @@ def main():
 
     structural_simulation.print_results()
 
-    # Outputs:
-    output_eng_csv(
-        time=t,
-        burn_time=ib_operation.burn_time,
-        thrust=ib_operation.thrust,
-        propellant_volume=ib_operation.propellant_volume,
-        dt=0.1,
-        chamber_od=motor.structure.chamber.outer_diameter,
-        chamber_length=motor.structure.chamber.length,
-        eng_resolution=25,
-        propellant_density=motor.propellant.density,
-        motor_dry_mass=motor.structure.dry_mass,
-        manufacturer="LCP 2022",
-        name="OLYMPUS",
-    )
-
     print("\n\nExecution time: %.4f seconds\n\n" % (time.time() - start))
 
     # Plots:
-    performance_plot(
-        ib_operation.thrust,
-        ib_operation.P_0,
-        ib_operation.t,
-        ib_operation.thrust_time,
-    )
-
-    main_plot(
-        ib_operation.t,
-        ib_operation.thrust,
-        ib_operation.P_0,
-        ib_operation.klemmung,
-        ib_operation.m_prop,
-        ib_operation.thrust_time,
-    )
-
-    mass_flux_plot(
-        t,
-        ib_operation.grain_mass_flux,
-        ib_operation.thrust_time,
-    )
-
-    ballistics_plots(
-        t,
-        ballistic_operation.acceleration,
-        ballistic_operation.v,
-        ballistic_operation.y,
-        9.81,
-    )
-
     performance_interactive_plot(ib_operation).show()
 
 
