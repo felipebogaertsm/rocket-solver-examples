@@ -35,6 +35,7 @@ from rocketsolver.utils.plots import performance_interactive_plot
 
 from rocketsolver.simulations.internal_balistics_coupled import (
     InternalBallisticsCoupled,
+    InternalBallisticsCoupledParams,
 )
 from rocketsolver.simulations.structural import StructuralSimulation
 
@@ -123,8 +124,7 @@ def main():
     )
 
     # IB coupled simulation:
-    internal_ballistics_coupled_simulation = InternalBallisticsCoupled(
-        rocket=rocket,
+    params = InternalBallisticsCoupledParams(
         atmosphere=Atmosphere1976(),
         d_t=0.001,
         dd_t=10,
@@ -132,14 +132,11 @@ def main():
         igniter_pressure=1.5e6,
         rail_length=5,
     )
+    simulation = InternalBallisticsCoupled(rocket=rocket, params=params)
 
-    (
-        t,
-        ib_operation,
-        ballistic_operation,
-    ) = internal_ballistics_coupled_simulation.run()
+    (ib_operation, ballistic_operation) = simulation.run()
 
-    internal_ballistics_coupled_simulation.print_results()
+    simulation.print_results()
 
     # Structural simulation:
     structural_simulation = StructuralSimulation(
