@@ -27,19 +27,11 @@ from rocketsolver.models.recovery.events import (
     ApogeeBasedEvent,
 )
 from rocketsolver.models.recovery.parachutes import HemisphericalParachute
-from rocketsolver.models.rocket.fuselage import Fuselage
-from rocketsolver.models.rocket.structure import RocketStructure
+from rocketsolver.models.fuselage import Fuselage
 from rocketsolver.models.atmosphere import Atmosphere1976
 from rocketsolver.models.propulsion import SolidMotor
 
-from rocketsolver.utils.utilities import output_eng_csv
-from rocketsolver.utils.plots import (
-    performance_interactive_plot,
-    performance_plot,
-    main_plot,
-    mass_flux_plot,
-    ballistics_plots,
-)
+from rocketsolver.utils.plots import performance_interactive_plot
 
 from rocketsolver.simulations.internal_balistics_coupled import (
     InternalBallisticsCoupled,
@@ -124,24 +116,15 @@ def main():
     )
 
     # Rocket:
-    fuselage = Fuselage(
-        length=4e3,
-        drag_coefficient=0.5,
-        outer_diameter=0.17,
-    )
-
-    rocket_structure = RocketStructure(mass_without_motor=25)
+    fuselage = Fuselage(length=4e3, drag_coefficient=0.5, outer_diameter=0.17)
 
     rocket = Rocket(
-        fuselage=fuselage,
-        structure=rocket_structure,
+        propulsion=motor, recovery=recovery, fuselage=fuselage, mass_without_motor=25
     )
 
     # IB coupled simulation:
     internal_ballistics_coupled_simulation = InternalBallisticsCoupled(
-        motor=motor,
         rocket=rocket,
-        recovery=recovery,
         atmosphere=Atmosphere1976(),
         d_t=0.001,
         dd_t=10,
