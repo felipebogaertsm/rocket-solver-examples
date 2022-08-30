@@ -126,15 +126,15 @@ def main():
     fuselage = Fuselage3D(
         nose_cone=nose_cone,
         mass_without_motor=25,
-        I_x=0.1,
-        I_y=0.1,
-        I_z=0.1,
-        I_xy=0.1,
-        I_xz=0.1,
-        I_yz=0.1,
-        I_yx=0.1,
-        I_zx=0.1,
-        I_zy=0.1,
+        I_x=1.2,
+        I_y=1.3,
+        I_z=1.2,
+        I_xy=0.0,
+        I_xz=0.0,
+        I_yz=0.0,
+        I_yx=0.0,
+        I_zx=0.0,
+        I_zy=0.0,
     )
 
     fuselage.add_body_segment(
