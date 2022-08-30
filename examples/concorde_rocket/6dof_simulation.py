@@ -26,10 +26,15 @@ from rocketsolver.models.recovery.events import (
 )
 from rocketsolver.models.recovery.parachutes import HemisphericalParachute
 from rocketsolver.models.fuselage import Fuselage3D
+from rocketsolver.models.fuselage.components.fins.trapezoidal import TrapezoidalFins
+from rocketsolver.models.fuselage.components.body import CylindricalBody
 from rocketsolver.models.fuselage.components.nosecones.haack import HaackSeriesNoseCone
 from rocketsolver.models.atmosphere import Atmosphere1976
 from rocketsolver.models.propulsion import SolidMotor
-from rocketsolver.simulations.ballistics_6dof import Ballistic6DOFSimulation
+from rocketsolver.simulations.ballistics_6dof import (
+    Ballistic6DOFSimulation,
+    Ballistic6DOFSimulationParams,
+)
 
 
 def main():
@@ -132,18 +137,44 @@ def main():
         I_zy=0.1,
     )
 
+    fuselage.add_body_segment(
+        body_segment=CylindricalBody(
+            material=Al6063T5(),
+            center_of_gravity=1,
+            mass=10,
+            outer_diameter=0.17,
+            length=3,
+            rugosity=5e-3,
+            constant_K=0,
+            fins=TrapezoidalFins(
+                material=Al6063T5(),
+                mass=0.1,
+                center_of_gravity=0,
+                thickness=0.005,
+                count=4,
+                rugosity=5e-3,
+                base_length=150e-3,
+                tip_length=100e-3,
+                average_span=110e-3,
+                height=80e-3,
+                body_diameter=0.17,
+            ),
+        )
+    )
+
     rocket = Rocket3D(propulsion=motor, recovery=recovery, fuselage=fuselage)
 
     # Simulation:
-    simulation = Ballistic6DOFSimulation(
-        rocket=rocket,
+    params = Ballistic6DOFSimulationParams(
         atmosphere=Atmosphere1976(),
         d_t=0.001,
         initial_elevation_amsl=636,
         rail_length=5,
         launch_angle=90,
         heading_angle=85,
+        igniter_pressure=1e6,
     )
+    simulation = Ballistic6DOFSimulation(rocket=rocket, params=params)
 
     simulation.run()
     simulation.print_results()
