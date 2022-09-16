@@ -140,8 +140,7 @@ def main():
     results = montecarlo_sim.run()
     apogee_results = np.array([result[1].apogee for result in results])
 
-    # Presentation:
-
+    # Visualization:
     fig = go.Figure()
     fig.add_trace(go.Histogram(x=apogee_results))
     fig.update_xaxes(title_text="Apogee (m)")

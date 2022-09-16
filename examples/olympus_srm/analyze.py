@@ -5,6 +5,10 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, version 3.
 
+"""
+Analytics module is under development. This code is not guaranteed to work.
+"""
+
 import pandas as pd
 
 from rocketsolver.analytics.srm import AnalyzeSRMOperation
