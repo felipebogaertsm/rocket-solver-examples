@@ -25,8 +25,7 @@ from rocketsolver.models.recovery.events import (
     ApogeeBasedEvent,
 )
 from rocketsolver.models.recovery.parachutes import HemisphericalParachute
-from rocketsolver.models.rocket.fuselage import Fuselage
-from rocketsolver.models.rocket.structure import RocketStructure
+from rocketsolver.models.fuselage import Fuselage
 from rocketsolver.models.atmosphere import Atmosphere1976
 
 
@@ -155,11 +154,8 @@ def main():
         outer_diameter=0.17,
     )
 
-    rocket_structure = RocketStructure(mass_without_motor=25)
-
     rocket = Rocket(
-        fuselage=fuselage,
-        structure=rocket_structure,
+        propulsion=motor, recovery=recovery, fuselage=fuselage, mass_without_motor=25
     )
 
     # Read experimental data from CSV:
@@ -168,7 +164,6 @@ def main():
     # Analyze:
     analyze = AnalyzeSRMOperation(
         data=df,
-        initial_propellant_mass=19.84,
         theoretical_motor=motor,
         pressure_header_name="Pressure (Mpa)",
     )
