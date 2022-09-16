@@ -24,8 +24,7 @@ from rocketsolver.models.recovery.events import (
     ApogeeBasedEvent,
 )
 from rocketsolver.models.recovery.parachutes import HemisphericalParachute
-from rocketsolver.models.rocket.fuselage import Fuselage
-from rocketsolver.models.rocket.structure import RocketStructure
+from rocketsolver.models.fuselage import Fuselage
 from rocketsolver.models.atmosphere import Atmosphere1976
 from rocketsolver.models.propulsion import SolidMotor
 
@@ -33,6 +32,7 @@ from rocketsolver.montecarlo import MonteCarloParameter, MonteCarloSimulation
 
 from rocketsolver.simulations.internal_balistics_coupled import (
     InternalBallisticsCoupled,
+    InternalBallisticsCoupledParams,
 )
 
 
@@ -117,33 +117,28 @@ def main():
         outer_diameter=0.17,
     )
 
-    rocket_structure = RocketStructure(mass_without_motor=25)
-
     rocket = Rocket(
-        fuselage=fuselage,
-        structure=rocket_structure,
+        propulsion=motor, recovery=recovery, fuselage=fuselage, mass_without_motor=25
     )
 
     # Simulation:
+    params = InternalBallisticsCoupledParams(
+        Atmosphere1976(),
+        0.01,
+        10,
+        600,
+        1.5e6,
+        5,
+    )
 
     montecarlo_sim = MonteCarloSimulation(
-        [
-            motor,
-            rocket,
-            recovery,
-            Atmosphere1976(),
-            0.01,
-            10,
-            600,
-            1.5e6,
-            5,
-        ],
+        [rocket, params],
         1000,
         InternalBallisticsCoupled,
     )
 
     results = montecarlo_sim.run()
-    apogee_results = np.array([result[2].apogee for result in results])
+    apogee_results = np.array([result[1].apogee for result in results])
 
     # Presentation:
 
