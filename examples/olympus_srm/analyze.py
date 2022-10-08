@@ -15,7 +15,7 @@ from rocketsolver.analytics.srm import AnalyzeSRMOperation
 from rocketsolver.models.materials.elastics import EPDM
 from rocketsolver.models.materials.metals import Steel, Al6063T5
 from rocketsolver.models.propellants.solid import get_solid_propellant_from_name
-from rocketsolver.models.propulsion import SolidMotor
+from rocketsolver.models.propulsion import MotorFromDataframe, SolidMotor
 from rocketsolver.models.propulsion.grain import Grain
 from rocketsolver.models.propulsion.grain.bates import BatesSegment
 from rocketsolver.models.propulsion.structure import MotorStructure
@@ -167,13 +167,19 @@ def main():
 
     # Analyze:
     analyze = AnalyzeSRMOperation(
-        data=df,
+        empirical_motor=MotorFromDataframe(
+            dataframe=df,
+            nozzle=nozzle,
+            propellant=propellant,
+            initial_propellant_mass=21,
+            dry_mass=21.013,
+            length=grain.total_length + 10e-3,
+            pressure_header_name="Pressure (Mpa)",
+        ),
         theoretical_motor=motor,
-        pressure_header_name="Pressure (Mpa)",
+        external_pressure=1e5,
     )
-    analyze.run_ballistic_simulation(
-        rocket=rocket, recovery=recovery, atmosphere=Atmosphere1976()
-    )
+    analyze.run_ballistic_simulation(rocket=rocket, atmosphere=Atmosphere1976())
     analyze.ballistic_simulation.print_results()
 
     figure_1 = analyze.plot_thrust_propellant_mass()
@@ -190,10 +196,6 @@ def main():
 
     figure_5 = analyze.plot_thrust_coefficient()
     figure_5.show()
-
-    analyze.generate_eng_file(
-        name="Olympus-Hot-Fire_02-07-2022", manufacturer="LCP 2022"
-    )
 
 
 if __name__ == "__main__":
